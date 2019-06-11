@@ -14,7 +14,11 @@ class LeNet(object):
     #    conv1 -> pool1 -> conv2 -> pool2 -> fc1 -> relu -> fc2 -> relu -> softmax
     # l0      l1       l2       l3        l4     l5      l6     l7      l8        l9
     def __init__(self, lr=0.1):
-        self.lr = lr
+        '''
+        初始化每一层的权值，设定学习速率
+        :param lr:
+        '''
+        self.lr = lr #学习速率
         # 6 convolution kernal, each has 1 * 5 * 5 size
         self.conv1 = xavier_init(6, 1, 5, 5)
         # the size for mean pool is 2 * 2, stride = 2
@@ -53,6 +57,14 @@ class LeNet(object):
         l0_delta, self.conv1 = self.convolution(self.l0, self.conv1, l1_delta, deriv=True)  # (batch_sz, 1, 28, 28)
 
     def convolution(self, input_map, kernal, front_delta=None, deriv=False):
+        """
+        定义卷积操作
+        :param input_map:
+        :param kernal:
+        :param front_delta:
+        :param deriv:
+        :return:
+        """
         N, C, W, H = input_map.shape
         K_NUM, K_C, K_W, K_H = kernal.shape
         if deriv == False:
@@ -81,6 +93,14 @@ class LeNet(object):
             return back_delta, kernal
 
     def mean_pool(self, input_map, pool, front_delta=None, deriv=False):
+        """
+        定义均值池化操作
+        :param input_map:
+        :param pool:
+        :param front_delta:
+        :param deriv:
+        :return:
+        """
         N, C, W, H = input_map.shape
         P_W, P_H = tuple(pool)
         if deriv == False:
@@ -123,10 +143,20 @@ class LeNet(object):
 
 
 def xavier_init(c1, c2, w=1, h=1, fc=False):
+    """
+    权值初始化函数
+    类似于tf.truncated_normal()的作用
+    :param c1:
+    :param c2:
+    :param w:
+    :param h:
+    :param fc:
+    :return:
+    """
     fan_1 = c2 * w * h
     fan_2 = c1 * w * h
     ratio = np.sqrt(6.0 / (fan_1 + fan_2))
-    params = ratio * (2*np.random.random((c1, c2, w, h)) - 1)
+    params = ratio * (2*np.random.random((c1, c2, w, h)) - 1) #产生初始的权重。
     if fc == True:
         params = params.reshape(c1, c2)
     return params
@@ -168,6 +198,6 @@ if __name__ == '__main__':
             correct_prob = [ softmax_output[i][np.argmax(output_label[i])] for i in range(batch_sz) ]
             correct_prob = filter(lambda x: x > 0, correct_prob)
             loss = -1.0 * np.sum(np.log(correct_prob))
-            print "The %d iters result:" % iters
-            print "The accuracy is %f The loss is %f " % (accuracy, loss)
+            print ("The %d iters result:" % iters)
+            print ("The accuracy is %f The loss is %f " % (accuracy, loss))
         my_CNN.backward_prop(softmax_output, output_label)
