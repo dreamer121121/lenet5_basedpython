@@ -75,7 +75,7 @@ def decode_idx3_ubyte(idx3_ubyte_file):
     offset = 0
     fmt_header = '>iiii'
     magic_number, num_images, num_rows, num_cols = struct.unpack_from(fmt_header, bin_data, offset)
-    print '魔数:%d, 图片数量: %d张, 图片大小: %d*%d' % (magic_number, num_images, num_rows, num_cols)
+    print ('魔数:%d, 图片数量: %d张, 图片大小: %d*%d' % (magic_number, num_images, num_rows, num_cols))
 
     # 解析数据集
     image_size = num_rows * num_cols
@@ -84,7 +84,7 @@ def decode_idx3_ubyte(idx3_ubyte_file):
     images = np.empty((num_images, num_rows, num_cols))
     for i in range(num_images):
         if (i + 1) % 10000 == 0:
-            print '已解析 %d' % (i + 1) + '张'
+            print ('已解析 %d' % (i + 1) + '张')
         images[i] = np.array(struct.unpack_from(fmt_image, bin_data, offset)).reshape((num_rows, num_cols))
         offset += struct.calcsize(fmt_image)
     return images
@@ -103,7 +103,7 @@ def decode_idx1_ubyte(idx1_ubyte_file):
     offset = 0
     fmt_header = '>ii'
     magic_number, num_images = struct.unpack_from(fmt_header, bin_data, offset)
-    print '魔数:%d, 图片数量: %d张' % (magic_number, num_images)
+    print ('魔数:%d, 图片数量: %d张' % (magic_number, num_images))
 
     # 解析数据集
     offset += struct.calcsize(fmt_header)
@@ -111,7 +111,7 @@ def decode_idx1_ubyte(idx1_ubyte_file):
     labels = np.empty(num_images)
     for i in range(num_images):
         if (i + 1) % 10000 == 0:
-            print '已解析 %d' % (i + 1) + '张'
+            print ('已解析 %d' % (i + 1) + '张')
         labels[i] = struct.unpack_from(fmt_image, bin_data, offset)[0]
         offset += struct.calcsize(fmt_image)
     return labels
@@ -200,16 +200,16 @@ def run():
     train_labels = load_train_labels() # (60000,)        1~10
     # test_images = load_test_images()
     # test_labels = load_test_labels()
-    print type(train_images), train_images.shape
-    print type(train_labels), train_labels.shape
+    print (type(train_images), train_images.shape)
+    print (type(train_labels), train_labels.shape)
 
     # 查看前十个数据及其标签以读取是否正确
     for i in range(10):
-        print train_labels[i]
-        print np.max(train_images), np.min(train_images)
+        print (train_labels[i])
+        print (np.max(train_images), np.min(train_images))
         plt.imshow(train_images[i], cmap='gray')
         plt.show()
-    print 'done'
+    print ('done')
 
 if __name__ == '__main__':
     run()

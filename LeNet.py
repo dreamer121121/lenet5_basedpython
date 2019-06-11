@@ -176,11 +176,11 @@ if __name__ == '__main__':
     train_imgs = fetch_MNIST.load_train_images()
     train_labs = fetch_MNIST.load_train_labels().astype(int)
     # size of data;                  batch size
-    data_size = train_imgs.shape[0]; batch_sz = 64;
+    data_size = train_imgs.shape[0]; batch_sz = 64
     # learning rate; max iteration;    iter % mod (avoid index out of range)
     lr = 0.01;     max_iter = 50000; iter_mod = int(data_size/batch_sz)
     train_labs = convertToOneHot(train_labs)
-    my_CNN = LeNet(lr)
+    my_CNN = LeNet(lr) #实例化构建网络
     for iters in range(max_iter):
         # starting index and ending index for input data
         st_idx = (iters % iter_mod) * batch_sz
